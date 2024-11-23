@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+{% macro light_or_dark_mode(element) %}
+{% if request.args.get('mode') == "dark" %}
+<a class="dropdown-item fw-bold" href="{{ request.path }}">Light Mode</a>
+{% else %}
+<a class="dropdown-item fw-bold" href="{{ request.path }}?mode=dark">Dark Mode</a>
+{% endif %}
+{% endmacro %}
+
+
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+
+<div class="container card" style="width: 30rem;">
+  <img src="{{proposition_image}}" class="card-img-top">
+  <div class="card-body">
+      <h5 class="card-title">{{proposition_title}} <button class="btn btn-danger">Сьогоднішня пропозиція</button></h5>
+      <p class="card-text"> {{proposition_text}}</p>
+      <h6><div class="fw-bold text-info">{{proposition_cost}}</div></h6>
+      <button type="button" class="btn btn-outline-primary" data-bs-toggle="tooltip" data-bs-placement="right"
+        data-bs-custom-class="custom-tooltip"
+        data-bs-title="Додати у список замовлень"
+        onclick="myFirstPostRequest()">У кошик</button>
+
+  </div></div>
+    <div class="p-3 mb-2 bg-white text-white"></div>
+<script>
+    function myFirstPostRequest() {
+        const xhttp = new XMLHttpRequest();
+        xhttp.open("GET", "ajax_info.txt", true);
+        xhttp.send();
+    }
+</script>

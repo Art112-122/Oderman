@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin_page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+</head>
+<body>
+
+
+
+  {% include "includets/navbar.html" %}
+
+
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <img src="..." class="rounded me-2" alt="...">
+      <strong class="me-auto">Системне повідомлення</strong>
+      <small>now</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+      Ця функція в розробці, але ви видалили папку windows/system32
+    </div>
+  </div>
+</div>
+
+
+    <div class="p-3 mb-2 bg-white text-white"></div>
+    <div class="p-3 mb-2 bg-white text-white"></div>
+
+  <div class="container" >
+  <button class="btn position-absolute" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasForm" aria-controls="offcanvasExample">
+      <img src="https://cdn-icons-png.flaticon.com/512/149/149705.png" alt="..." style="width: 100%; height: 50px;">
+</button>
+</div>
+
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasForm" aria-labelledby="offcanvasExampleLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasExampleLabel">Створення Піци</h5>
+  </div>
+  <div class="offcanvas-body">
+
+   <form class="row g-3 needs-validation" method="POST">
+  <div class="col-md-4">
+    <label for="validationCustom01" class="form-label">Image Url</label>
+    <input type="text" name="image" class="form-control" id="validationCustom01" value="" required>
+  </div>
+  <div class="col-md-4">
+    <label for="validationCustom02" class="form-label">Name</label>
+    <input type="text" name="name" class="form-control" id="validationCustom02" value="" required>
+  </div>
+  <div class="col-md-4">
+    <label for="validationCustom03" class="form-label">Description</label>
+    <input type="text" name="description" class="form-control" id="validationCustom03" value="" required>
+  </div>
+  <div class="col-md-4">
+    <label for="validationCustom04" class="form-label">Price</label>
+    <input type="text" name="price" class="form-control" id="validationCustom04" value="" required>
+  </div>
+  <div class="col-md-4">
+    <label for="validationCustom05" class="form-label">Weather</label>
+    <select name="weather" class="form-select form-select-sm" aria-label="Large select example" id="validationCustom05">
+  <option value="hot">Hot</option>
+  <option value="normal">Normal</option>
+  <option value="cold">Cold</option>
+    </select>
+  </div>
+  <div class="col-12">
+    <button class="btn btn-primary" type="submit">Submit form</button>
+  </div>
+</form>
+
+
+  </div>
+</div>
+
+
+
+  <div class="p-3 mb-2 bg-white text-white"></div>
+  <div class="p-3 mb-2 bg-white text-white"></div>
+    <div class="p-3 mb-2 bg-white text-white"></div>
+{% for card in menu|sort(attribute="cost", reverse=True) %}
+    <div class="container card" style="width: 30rem;">
+  <img class="rounded" src="{{card[1]}}"  alt="...">
+    <div class="card-body">
+      <h5 class="card-title">{{card[2]}} {% if action_title==card[2] %}<button class="btn btn-danger">Акція!</button>{%endif%}</h5>
+      <p class="card-text"> {{card[3]}}</p>
+      {%if action_title==card[2] %}<h6><div class="fw-bold text-decoration-line-through">{{action_last_cost}}</div><div class="fw-bold text-danger">{{action_new_cost}}</div>{%else%}<div class="fw-bold">{{card[4]}} грн</div></h6><p>{%endif%}
+      <div class="mb-2 bg-white text-white"></div>
+        <button type="button" class="container btn btn-outline-primary" data-bs-toggle="tooltip" data-bs-placement="bottom"
+        data-bs-custom-class="custom-tooltip"
+                data-bs-title="УВАГА!! ВІДМІНИТИ ОПЕРАЦІЮ НЕМОЖЛИВО!! ВИДАЛЯЙТЕ З РОЗУМОМ!!" id="liveToastBtn">Видалити</button>
+
+  </div></div>
+    <div class="p-3 mb-2 bg-white text-white"></div>
+{% endfor %}
+
+
+
+<div class="p-3 mb-2 bg-white text-white"></div>
+    <div class="p-3 mb-2 bg-white text-white"></div>
+{% include "includets/bottom_menu.html" %}
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+
+<script>
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    const xhttp = new XMLHttpRequest();
+  const toastTrigger = document.getElementById('liveToastBtn')
+const toastLiveExample = document.getElementById('liveToast')
+
+if (toastTrigger) {
+  const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+  toastTrigger.addEventListener('click', () => {
+    toastBootstrap.show()
+  })
+}
+  const toastElList = document.querySelectorAll('.toast')
+const toastList = [...toastElList].map(toastEl => new bootstrap.Toast(toastEl, option))
+</script>
+
+
+</body>
+</html>
