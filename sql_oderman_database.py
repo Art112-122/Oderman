@@ -54,13 +54,46 @@ def select_query_func(where: str | None = ""):
     table_select = f"""SELECT * FROM Pizzas
         {where};"""
 
-    print("getted")
-
     cursor.execute(table_select)
 
     return1 = cursor.fetchall()
+
+    print(f"getted {return1}")
 
     cursor.close()
     sqlite_connection.close()
 
     return return1
+
+
+def delete_query_func(id: int):
+    sqlite_connection = sqlite3.connect("sql_oderman_menu.db")
+
+    cursor = sqlite_connection.cursor()
+
+    table_delete = f"""DELETE FROM Pizzas WHERE id='{id}';"""
+
+    cursor.execute(table_delete)
+
+    cursor.close()
+    sqlite_connection.commit()
+    sqlite_connection.close()
+    print(f"delete-{id}")
+
+
+def update_query_func(*args, id:int) -> None:
+    sqlite_connection = sqlite3.connect("sql_oderman_menu.db")
+
+    cursor = sqlite_connection.cursor()
+
+    table_insert = f"""UPDATE Pizzas
+                      SET url_image = ?, item = ?, description = ?, amount = ?
+                      WHERE id = ?;"""
+
+    print("inserted")
+
+    cursor.execute(table_insert, (args[0], args[1], args[2], args[3], id))
+
+    cursor.close()
+    sqlite_connection.commit()
+    sqlite_connection.close()

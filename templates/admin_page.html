@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Admin_page</title>
@@ -89,10 +89,14 @@
       <p class="card-text"> {{card[3]}}</p>
       {%if action_title==card[2] %}<h6><div class="fw-bold text-decoration-line-through">{{action_last_cost}}</div><div class="fw-bold text-danger">{{action_new_cost}}</div>{%else%}<div class="fw-bold">{{card[4]}} грн</div></h6><p>{%endif%}
       <div class="mb-2 bg-white text-white"></div>
-        <button type="button" class="container btn btn-outline-primary" data-bs-toggle="tooltip" data-bs-placement="bottom"
+      <form action="/delete/" method="post">
+        <input type="text" value="{{card[0]}}" name="id_delete" class="invisible">
+        <input type="submit" class="container btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="bottom"
         data-bs-custom-class="custom-tooltip"
-                data-bs-title="УВАГА!! ВІДМІНИТИ ОПЕРАЦІЮ НЕМОЖЛИВО!! ВИДАЛЯЙТЕ З РОЗУМОМ!!" id="liveToastBtn">Видалити</button>
-
+                data-bs-title="УВАГА!! ВІДМІНИТИ ОПЕРАЦІЮ НЕМОЖЛИВО!! ВИДАЛЯЙТЕ З РОЗУМОМ!!" value="Видалити">
+      </form>
+      <br/>
+      <a href="http://127.0.0.1:5001/edit/{{card[0]}}" class="container btn btn-warning">Редагувати</a>
   </div></div>
     <div class="p-3 mb-2 bg-white text-white"></div>
 {% endfor %}

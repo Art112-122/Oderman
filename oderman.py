@@ -1,6 +1,6 @@
 import sqlite3
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 from weather import weather_get
 
 import sql_oderman_database
@@ -11,7 +11,6 @@ app = Flask(__name__)
 sql_oderman_database.start_conetion_db()
 
 
-menu_positions = sql_oderman_database.select_query_func()
 
 table_is_not_null=None
 try:
@@ -31,6 +30,8 @@ except TypeError as error:
 
 @app.get("/")
 def start():
+    menu_positions = sql_oderman_database.select_query_func()
+
     if table_is_not_null == True:
         return render_template("start_page.html", link="http://127.0.0.1:5001/menu/", action=True,
                            proposition_image=weather_proposition[0],
@@ -46,11 +47,16 @@ def start():
 
 @app.get(f"/admin/")
 def admin_page():
+    menu_positions = sql_oderman_database.select_query_func()
+
     return render_template("admin_page.html", menu=menu_positions, message=False)
 
 
 @app.post(f"/admin/")
 def menu_add():
+  menu_positions = sql_oderman_database.select_query_func()
+
+
   try:
     url = request.form["image"]
     name = request.form["name"]
@@ -71,10 +77,55 @@ def menu_add():
     return render_template("admin_page.html", menu=menu_positions, message=True)
 
   except sqlite3.Error():
-      return render_template("error_page.html", error="Невідома помилка, перевірте чи немає такої піци вже")
+      return render_template("error_page.html", error="Невідома помилка, перевірте чи немає такої піци вже", link="http://127.0.0.1:5001/admin/")
+
+
+@app.post("/delete/")
+def delete():
+    id = request.form["id_delete"]
+    sql_oderman_database.delete_query_func(int(id))
+    return redirect("/admin/")
+
+
+
+
+@app.get("/edit/<int:pizza_id>")
+def edit(pizza_id):
+    edit_column = sql_oderman_database.select_query_func(where=f"WHERE id={pizza_id}")
+    return render_template("edit.html", editing_column=edit_column[0])
+
+
+
+
+@app.post("/edit/<int:pizza_id>")
+def edit_post(pizza_id):
+
+    try:
+        url = request.form["image"]
+        name = request.form["name"]
+        description = request.form["description"]
+        price = request.form["price"]
+        nums = "1234567890"
+        for number in nums:
+            if number in name:
+                return render_template("error_page.html", error="У назві не можуть бути цифри")
+
+        for num in price:
+            if num.isalpha():
+                return render_template("error_page.html", error="У ціні не можуть бути букви")
+
+        sql_oderman_database.update_query_func(url, name, description, int(price), id=pizza_id)
+
+        return redirect("/admin/")
+
+    except sqlite3.Error():
+        return render_template("error_page.html", error="Невідома помилка, перевірте чи немає такої піци вже", link=f"http://127.0.0.1:5001/edit/{pizza_id}")
+
+
 
 @app.get("/menu/")
 def menu():
+    menu_positions = sql_oderman_database.select_query_func()
     return render_template("menu_page.html",
                            menu=menu_positions,
 
