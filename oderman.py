@@ -1,11 +1,15 @@
 import sqlite3
 
+from flask_wtf import FlaskForm
+from wtforms import RadioField, SubmitField, TextAreaField
+
 from flask import Flask, render_template, request, redirect
 from weather import weather_get
 
 import sql_oderman_database
 
 app = Flask(__name__)
+app.config["SECRET_KEY"] = "Jstppl"
 
 sql_oderman_database.start_conetion_db()
 
@@ -18,6 +22,15 @@ try:
         table_is_not_null = False
 except TypeError as error:
     print("пустая таблица")
+
+
+class Comments(FlaskForm):
+    desc = TextAreaField("Description", render_kw={"required": True})
+    stars = RadioField("Stars", render_kw={"required": True})
+    submit = SubmitField("Submit")
+
+
+sql_oderman_database.create_table_comments()
 
 
 @app.get("/")
@@ -37,7 +50,8 @@ def start():
 
 @app.get("/opros")
 def result_get():
-        return render_template("opros.html")
+    return render_template("opros.html")
+
 
 @app.post("/opros")
 def result():
@@ -148,7 +162,18 @@ def menu():
 
 @app.get("/comments/")
 def comments():
-    return render_template("comments_page.html", comments_len=0, comments_start=0)
+    form = Comments()
+    form.stars.choices = [("1", 1), ("2", 2), ("3", 3), ("4", 4), ("5", 5)]
+    comment = sql_oderman_database.select_query_comments()
+    return render_template("comments_page.html", form=form, comment=comment)
+
+
+@app.post("/comments/")
+def post_comments():
+    desc = request.form["desc"]
+    stars = request.form["stars"]
+    sql_oderman_database.insert_query_comments(desc, stars)
+    return redirect("/comments/")
 
 
 @app.errorhandler(404)

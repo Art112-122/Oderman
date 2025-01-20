@@ -97,3 +97,60 @@ def update_query_func(*args, id:int) -> None:
     cursor.close()
     sqlite_connection.commit()
     sqlite_connection.close()
+
+
+def create_table_comments() -> None:
+    sqlite_connection = sqlite3.connect("sql_oderman_menu.db")
+
+    cursor = sqlite_connection.cursor()
+
+    sqlite_select_query = "SELECT sqlite_version()"
+    cursor.execute(sqlite_select_query)
+
+    create_query = """
+    CREATE TABLE IF NOT EXISTS Comments (
+      id INTEGER PRIMARY KEY,
+      text TEXT NOT NULL,
+      stars INTEGER NOT NULL
+      );
+    """
+
+    cursor.execute(create_query)
+
+
+def select_query_comments(where: str | None = ""):
+    sqlite_connection = sqlite3.connect("sql_oderman_menu.db")
+
+    cursor = sqlite_connection.cursor()
+
+    table_select = f"""SELECT * FROM Comments
+        {where};"""
+
+    cursor.execute(table_select)
+
+    return1 = cursor.fetchall()
+
+    print(f"getted {return1}")
+
+    cursor.close()
+    sqlite_connection.close()
+
+    return return1
+
+
+
+def insert_query_comments(*args) -> None:
+    sqlite_connection = sqlite3.connect("sql_oderman_menu.db")
+
+    cursor = sqlite_connection.cursor()
+
+    table_insert = """INSERT INTO Comments (text, stars)
+        VALUES (?,?);"""
+
+    print("inserted")
+
+    cursor.execute(table_insert, args)
+
+    cursor.close()
+    sqlite_connection.commit()
+    sqlite_connection.close()
